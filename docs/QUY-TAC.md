@@ -95,9 +95,11 @@ font và tài liệu đó, ưu tiên tài liệu đó và ghi lại quyết đ�
     chỉnh), bo tròn lên theo bội số ô vở để khung ô trùng lưới chia ô của trang. Chữ **viết sát mép trái ô**
     (chừa 0.5 ô ly), không căn giữa, để không dư khoảng trống. Chữ cái đơn thì căn
     giữa ô. Dùng cho từ, cụm từ ngắn vừa một dòng.
-  - **Đoạn văn** (tự xuống dòng): ngắt dòng theo từ cho vừa bề rộng trang; "Số lần
-    chép" = số lần chép lại cả đoạn, lần đầu in đỏ làm mẫu, các lần sau in xám.
-    Dùng cho câu dài, tên đầy đủ, đoạn văn.
+  - **Đoạn văn**: **mỗi lần nhấn Enter trong ô nhập là một dòng mới trên trang**
+    (soạn thế nào, trang ra thế ấy); dòng nào dài quá bề rộng thì tự ngắt tiếp theo
+    từ; dòng trống giữ thành một dòng kẻ trống. "Số lần chép" = số lần chép lại cả
+    đoạn, lần đầu in đỏ làm mẫu, các lần sau in nét đứt. Dùng cho câu dài, tên đầy
+    đủ, đoạn văn.
 - Hỗ trợ chữ thường, chữ hoa, chữ số, từ và câu ngắn có dấu đầy đủ.
 - **Nối nét** (bật mặc định): các tổ hợp oa, oi, qu, r đầu từ... được thay bằng glyph
   nối nét của font HP001 theo bảng trong `src/lib/noinet.ts`. Thứ tự các cặp thay
@@ -165,3 +167,4 @@ font và tài liệu đó, ưu tiên tài liệu đó và ghi lại quyết đ�
 | 18/10/2026 | Thêm tuỳ chọn Chữ tô: hiện nét đứt / để trống (chữ đỏ luôn hiện); bỏ ô "Chừa bên phải chữ", cố định 1 ô ly |
 | 18/10/2026 | Nét đứt đổi từ hai hàng chấm theo viền sang một hàng chấm theo tim nét (tự tính, phủ mọi chữ) |
 | 18/10/2026 | Cỡ vừa 2 ô ly: giữa hai dòng chữ cách một dòng kẻ trống (tự chèn) |
+| 18/10/2026 | Đoạn văn: Enter trong ô nhập = xuống dòng trên trang, dòng trống giữ nguyên |

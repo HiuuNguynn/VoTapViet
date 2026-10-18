@@ -190,8 +190,8 @@ export function Editor({ lesson, onChange }: Props) {
                 {it.mode === 'paragraph' ? (
                   <textarea
                     className={`${input} font-tapviet text-xl`}
-                    rows={3}
-                    placeholder="Nhập đoạn văn, tự xuống dòng theo bề rộng trang..."
+                    rows={4}
+                    placeholder="Nhập đoạn văn. Nhấn Enter để xuống dòng, trên trang cũng xuống dòng y hệt; dòng dài quá tự ngắt tiếp."
                     value={it.text}
                     onChange={(e) => updateItem(it.id, { text: e.target.value })}
                   />

@@ -159,18 +159,25 @@ function buildTextRows(item: LessonItem, s: PageSettings, m: Metrics): Row[] {
   const base = { itemId: item.id, span, scale, slant }
 
   if (item.mode === 'paragraph') {
-    // Đoạn văn: tự xuống dòng; mỗi lần chép lại là một bộ dòng, lần đầu là mẫu đỏ
+    // Đoạn văn: mỗi lần nhấn Enter trong ô nhập là một dòng mới trên trang (y hệt
+    // như soạn); dòng nào dài quá bề rộng thì tự ngắt tiếp theo từ; dòng trống giữ
+    // thành một dòng kẻ trống. Mỗi lần chép lại là một bộ dòng, lần đầu là mẫu đỏ.
     const slantExtra = slant ? Math.tan((SLANT_DEG * Math.PI) / 180) * 2.5 * s.oly * scale : 0
-    const lines = wrapWords(text, item.noiNet, fontSize, m.contentW - slantExtra).map((ln) =>
-      toGlyphs(ln, item.noiNet),
-    )
+    const lines = item.text
+      .replace(/\r\n?/g, '\n')
+      .split('\n')
+      .flatMap((raw) => {
+        const ln = raw.trim()
+        return ln ? wrapWords(ln, item.noiNet, fontSize, m.contentW - slantExtra) : ['']
+      })
+      .map((ln) => (ln ? toGlyphs(ln, item.noiNet) : ''))
     for (let r = 0; r < reps; r++) {
       for (const ln of lines) {
         const isSample = r === 0
-        const show = isSample || item.showTrace !== false
+        const show = ln !== '' && (isSample || item.showTrace !== false)
         rows.push({
           ...base,
-          cells: [{ x: m.contentX, glyphs: show ? ln : '', anchor: 'start', isSample }],
+          cells: show ? [{ x: m.contentX, glyphs: ln, anchor: 'start', isSample }] : [],
         })
       }
     }
