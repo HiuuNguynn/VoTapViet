@@ -77,6 +77,9 @@ export default function App() {
       alert('File không hợp lệ.')
     }
   }
+  // Các hàm dưới đang tạm ẩn khỏi giao diện (khối nút trong sidebar đã comment).
+  // Dòng này chỉ để TypeScript không báo "declared but never read"; xoá khi hiện lại nút.
+  void [fileRef, duplicateLesson, deleteLesson, doExport, doImport]
   const doPrint = () => {
     setTab('preview')
     setTimeout(() => window.print(), 150)
@@ -156,6 +159,7 @@ export default function App() {
               </li>
             ))}
           </ul>
+          {/* Tạm ẩn: Nhân bản / Xoá / Xuất JSON / Nhập JSON. Bỏ comment khối này để hiện lại.
           <div className="flex flex-wrap gap-1 border-t border-slate-200 p-2 text-xs">
             <button className="rounded border border-slate-300 px-2 py-1 hover:bg-slate-50" onClick={duplicateLesson}>
               Nhân bản
@@ -184,6 +188,7 @@ export default function App() {
               }}
             />
           </div>
+          */}
         </aside>
 
         {tab === 'edit' ? (
