@@ -29,7 +29,7 @@ export interface LessonItem {
 }
 
 export interface PageSettings {
-  /** Kích thước 1 ô ly (mm). CỐ ĐỊNH = FIXED_OLY_MM, không có ô chỉnh */
+  /** Kích thước 1 ô ly (mm). Luôn = olyForRowOly(rowOly), không có ô chỉnh */
   oly: number
   /** Số ô ly cho một dòng kẻ viết: 4 hoặc 5. Ô vở rộng cũng bằng đúng số này */
   rowOly: RowOly
@@ -77,7 +77,16 @@ export const PAGE_W = 210
 export const PAGE_H = 297
 
 /** Các thông số CỐ ĐỊNH của vở, không cho người dùng chỉnh (xem docs/QUY-TAC.md) */
-export const FIXED_OLY_MM = 4
+/**
+ * Ô ly theo loại vở, đúng chuẩn vở in sẵn (TCVN 1580, vở Hồng Hà School):
+ * vở 4 ô ly dùng ô 2,5 mm, vở 5 ô ly dùng ô 2 mm; cả hai cho dòng kẻ đậm 10 mm.
+ */
+export const OLY_BY_ROW: Record<RowOly, number> = { 4: 2.5, 5: 2 }
+export function olyForRowOly(rowOly: RowOly): number {
+  return OLY_BY_ROW[rowOly]
+}
+/** Khoảng cách hai đường kẻ đậm (mm), luôn cố định */
+export const ROW_HEIGHT_MM = 10
 export const FIXED_MARGIN_LEFT = 15
 export const FIXED_MARGIN_RIGHT = 10
 export const FIXED_MARGIN_TOP = 6
@@ -96,7 +105,7 @@ export const FONT_XHEIGHT = 824
 export const SLANT_DEG = 15
 
 export const DEFAULT_SETTINGS: PageSettings = {
-  oly: FIXED_OLY_MM,
+  oly: olyForRowOly(5),
   rowOly: 5,
   marginTop: FIXED_MARGIN_TOP,
   marginBottom: FIXED_MARGIN_BOTTOM,

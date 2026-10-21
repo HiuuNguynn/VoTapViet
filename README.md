@@ -30,8 +30,8 @@ Bài soạn được lưu tự động trong trình duyệt (localStorage). Dùn
 - Vite + React + TypeScript + Tailwind, không có backend.
 - Trang được vẽ bằng SVG theo đơn vị mm (`viewBox 0 0 210 297`), nên màn hình và bản in giống nhau.
 - Font **HP001 5 hàng** (`public/fonts/`): font chữ tập viết Unicode được chia sẻ rộng rãi
-  cho mục đích giáo dục. Metric: 2048 unitsPerEm, x-height 824 = 1 ô ly, chữ hoa 2060 = 2.5 ô ly. Ô ly cố định 4 mm.
-  Cỡ chữ (mm) = ô ly × 2048 / 824 (ô ly 4 mm → 9.94 mm ≈ 28.2 pt).
+  cho mục đích giáo dục. Metric: 2048 unitsPerEm, x-height 824 = 1 ô ly, chữ hoa 2060 = 2.5 ô ly. Ô ly theo loại vở: 4 ô ly = 2,5 mm, 5 ô ly = 2 mm, dòng kẻ đậm 10 mm.
+  Cỡ chữ (mm) = ô ly × 2048 / 824 (ô ly 2,5 mm → 6,21 mm ≈ 17,6 pt).
 - Nối nét (oa, oi, qu, r đầu từ...): bảng thay thế trong `src/lib/noinet.ts`, chuyển thể từ
   tool [LuyenChuTieuHoc](https://github.com/langmaninternet/LuyenChuTieuHoc) sang glyph đặc biệt của HP001.
 - Tải PDF: `src/lib/pdf.ts` render từng trang (`Page` với `plainGrid`, lưới vẽ bằng `<line>` thay cho

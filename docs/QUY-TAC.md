@@ -18,9 +18,10 @@ cần đổi một quy tắc thì sửa file này trước, rồi mới sửa co
 | Quy tắc | Giá trị mặc định | Ghi chú |
 | --- | --- | --- |
 | Khổ giấy | A4 dọc, 210 × 297 mm | SVG `viewBox 0 0 210 297`, 1 đơn vị = 1 mm |
-| Ô ly | **4 mm, CỐ ĐỊNH** | Không có ô chỉnh; dữ liệu cũ bị ghi đè về 4. Ô ly 2.5 mm của vở in sẵn quá nhỏ, học sinh lớp 1 không viết được |
-| Dòng kẻ viết | 5 ô ly / dòng (vở 5 ô ly) | Chỉ có 2 lựa chọn: vở 4 ô ly hoặc vở 5 ô ly, không có 6 |
-| Ô vở (bề rộng ô) | = số ô ly của dòng kẻ (5 hoặc 4) | Không có ô chỉnh riêng |
+| Loại vở | vở 5 ô ly (mặc định) hoặc vở 4 ô ly | Chỉ 2 lựa chọn, chọn chung cho bài hoặc riêng từng trang; không có 6 |
+| Ô ly | **theo loại vở, không có ô chỉnh**: vở 4 ô ly = **2,5 mm**, vở 5 ô ly = **2 mm** | Đúng chuẩn vở in sẵn (TCVN 1580, vở Hồng Hà School). Dữ liệu cũ tự tính lại |
+| Dòng kẻ đậm | **10 mm, cố định** | 4 × 2,5 = 5 × 2 = 10 mm, giống vở thật |
+| Ô vở (bề rộng ô) | = số ô ly của dòng kẻ (5 hoặc 4) = 10 mm | Không có ô chỉnh riêng |
 | Lề trái / phải | **15 mm / tối thiểu 10 mm, CỐ ĐỊNH** | Không có ô chỉnh. Vùng viết rộng đúng bội số ô vở (A4: 9 ô vở = 180 mm), phần dư dồn sang lề phải, không để dải ô lẻ ở mép phải |
 | Lề trên / dưới | **6 mm / 8 mm, CỐ ĐỊNH** | Tiêu đề cao **12 mm, CỐ ĐỊNH**. Không có ô chỉnh |
 | Lưới | kẻ mảnh mỗi ô ly, kẻ đậm ở ranh giới mỗi dòng viết | Màu chỉnh được |
@@ -52,13 +53,16 @@ font và tài liệu đó, ưu tiên tài liệu đó và ghi lại quyết đ�
 - Chiều cao theo quy định: chữ thường 1 ô ly; chữ hoa và b, l, h, k, g, y 2.5 ô ly;
   d, đ, p, q 2 ô ly; t 1.5 ô ly; chữ số 2 ô ly. Font HP001 đã làm đúng tỷ lệ này, nên
   **chỉ cần giữ công thức cỡ chữ**: `cỡ chữ (mm) = ô ly × 2048 / 824`
-  (ô ly 4 mm → 9.94 mm ≈ 28.2 pt).
+  (ô ly 2,5 mm → 6,21 mm ≈ 17,6 pt; ô ly 2 mm → 4,97 mm ≈ 14,1 pt; cỡ vừa gấp đôi).
+  Học sinh lớp 1 dùng **cỡ vừa** (chữ thường 2 ô ly = 5 mm trên vở 4 ô ly), đúng như
+  Vở Tập viết 1; muốn chữ to hơn thì chọn cỡ vừa, KHÔNG phóng ô ly.
 - **Cỡ chữ** chọn theo từng mục: *cỡ nhỏ* (chữ thường 1 ô ly, chữ hoa 2.5 ô ly) hoặc
   *cỡ vừa* (chữ thường 2 ô ly, chữ hoa 5 ô ly). **Ô ly và dòng kẻ không bao giờ đổi
   theo cỡ chữ**: chữ cỡ vừa vẫn nằm trong một dòng kẻ bình thường, chỉ cao gấp đôi
   (chữ hoa chiếm trọn dòng 5 ô ly, nét xuống rủ sang dòng dưới). **Mục cỡ vừa tự chèn
   một dòng kẻ trống sau mỗi dòng chữ** để nét xuống (g, y, 3 ô ly) không chạm chữ dòng
-  dưới; "Số dòng" vẫn là số dòng có chữ. Một trang được trộn nhiều cỡ.
+  dưới; trên vở 4 ô ly còn chèn thêm một dòng trống phía trên vì chữ hoa 5 ô ly cao hơn
+  dòng. "Số dòng" vẫn là số dòng có chữ. Một trang được trộn nhiều cỡ.
 - **Kiểu chữ** chọn theo từng mục: *chữ đứng* (mặc định, font HP001 gốc) hoặc *chữ
   nghiêng* 15° (skewX quanh chân dòng, chân chữ không đổi vị trí). Khi nghiêng, bề
   rộng ô tính thêm phần ngả của chữ hoa.
@@ -70,7 +74,7 @@ font và tài liệu đó, ưu tiên tài liệu đó và ghi lại quyết đ�
   đồ), không phải hai hàng chấm theo viền, và không bao giờ là chữ nét liền tô màu
   nhạt. Cách làm (`src/lib/glyphs.ts`): lấy viền glyph HP001 bằng opentype.js, từ mỗi
   điểm viền bắn tia vuông góc xuyên nét, điểm giữa hai mép là tim nét; rải chấm tròn
-  0.35 mm cách nhau 0.7 mm trên tim nét, vẽ bằng `<path>` nhiều đoạn 0.01 mm nắp tròn,
+  đường kính ≈ 3,6% cỡ chữ (kẹp 0,18–0,5 mm), cách nhau 2 lần đường kính, trên tim nét, vẽ bằng `<path>` nhiều đoạn 0.01 mm nắp tròn,
   màu xám (`#7a7a7a`, chỉnh được). Mọi ký tự, glyph nối nét, chữ nghiêng và PDF đều
   ra nét đứt giống nhau. Trên màn hình (tab Xem trước và bản xem thu nhỏ 62% bên tab
   Soạn bài) chấm được phóng to để mỗi chấm tối thiểu 2 px (prop `previewScale`); bản
@@ -168,3 +172,4 @@ font và tài liệu đó, ưu tiên tài liệu đó và ghi lại quyết đ�
 | 18/10/2026 | Nét đứt đổi từ hai hàng chấm theo viền sang một hàng chấm theo tim nét (tự tính, phủ mọi chữ) |
 | 18/10/2026 | Cỡ vừa 2 ô ly: giữa hai dòng chữ cách một dòng kẻ trống (tự chèn) |
 | 18/10/2026 | Đoạn văn: Enter trong ô nhập = xuống dòng trên trang, dòng trống giữ nguyên |
+| 21/10/2026 | Về chuẩn vở thật: ô ly theo loại vở (4 ô ly = 2,5 mm, 5 ô ly = 2 mm), dòng kẻ đậm 10 mm; bỏ ô ly cố định 4 mm; chấm nét đứt co theo cỡ chữ |

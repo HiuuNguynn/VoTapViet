@@ -152,9 +152,9 @@ export function Editor({ lesson, onChange }: Props) {
                   updatePage({ rowOly: e.target.value === '' ? undefined : normalizeRowOly(e.target.value) })
                 }
               >
-                <option value="">Theo chung ({s.rowOly} ô ly)</option>
-                <option value={4}>Vở 4 ô ly</option>
-                <option value={5}>Vở 5 ô ly</option>
+                <option value="">Theo chung (vở {s.rowOly} ô ly)</option>
+                <option value={4}>Vở 4 ô ly (ô 2,5 mm)</option>
+                <option value={5}>Vở 5 ô ly (ô 2 mm)</option>
               </select>
             </div>
           </div>
@@ -322,8 +322,8 @@ export function Editor({ lesson, onChange }: Props) {
       <section>
         <h2 className="mb-2 text-sm font-semibold text-slate-700">Trang & ô ly</h2>
         <p className="mb-2 text-xs text-slate-500">
-          Cố định: khổ A4, ô ly 4 mm, lề trái 15, phải 10, trên 6, dưới 8 mm, tiêu đề cao 12 mm.
-          Ô vở rộng bằng đúng số ô ly của dòng kẻ.
+          Cố định: khổ A4, dòng kẻ đậm 10 mm, lề trái 15, phải 10, trên 6, dưới 8 mm, tiêu đề cao 12 mm.
+          Ô ly theo loại vở như vở in sẵn: vở 4 ô ly = ô 2,5 mm, vở 5 ô ly = ô 2 mm. Ô vở rộng bằng số ô ly của dòng kẻ.
         </p>
         <div className="grid grid-cols-3 gap-2">
           <div>
@@ -333,8 +333,8 @@ export function Editor({ lesson, onChange }: Props) {
               value={s.rowOly}
               onChange={(e) => updateSettings({ rowOly: normalizeRowOly(e.target.value) })}
             >
-              <option value={4}>Vở 4 ô ly</option>
-              <option value={5}>Vở 5 ô ly</option>
+              <option value={4}>Vở 4 ô ly (ô 2,5 mm)</option>
+              <option value={5}>Vở 5 ô ly (ô 2 mm)</option>
             </select>
           </div>
           <div>

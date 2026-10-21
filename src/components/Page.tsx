@@ -6,9 +6,14 @@ import { PAGE_H, PAGE_W, SLANT_DEG } from '../lib/types'
 import { FONT_FAMILY, UI_FONT_STACK } from '../lib/measure'
 import { traceDotsPathData } from '../lib/glyphs'
 
-/** Nét đứt của chữ tô: một hàng chấm theo tim nét, đường kính TRACE_STROKE, cách nhau TRACE_GAP (mm) */
-const TRACE_STROKE = 0.35
-const TRACE_GAP = 0.7
+/**
+ * Nét đứt của chữ tô: một hàng chấm theo tim nét. Đường kính chấm tỷ lệ với cỡ chữ
+ * (≈ 3.6% cỡ chữ: ô ly 2 mm → 0.18, 2.5 mm → 0.22, cỡ vừa 2.5 mm → 0.45 mm),
+ * kẹp trong [TRACE_MIN, TRACE_MAX]; khoảng cách chấm = 2 lần đường kính.
+ */
+const TRACE_RATIO = 0.036
+const TRACE_MIN = 0.18
+const TRACE_MAX = 0.5
 
 interface Props {
   lesson: Lesson
@@ -40,13 +45,13 @@ export function Page({
   previewScale,
 }: Props) {
   const s = page.settings
-  // Trên màn hình: phóng chấm nét đứt sao cho mỗi chấm >= MIN_DOT_PX, kể cả khi thu nhỏ
-  const dotK =
-    previewScale === undefined
-      ? 1
-      : Math.max(1, MIN_DOT_PX / (TRACE_STROKE * PX_PER_MM * Math.max(0.1, previewScale)))
-  const traceStroke = TRACE_STROKE * dotK
-  const traceGap = TRACE_GAP * dotK
+  // Kích thước chấm theo cỡ chữ; trên màn hình phóng to để mỗi chấm >= MIN_DOT_PX
+  const traceDims = (fontSize: number) => {
+    const base = Math.min(TRACE_MAX, Math.max(TRACE_MIN, fontSize * TRACE_RATIO))
+    const k =
+      previewScale === undefined ? 1 : Math.max(1, MIN_DOT_PX / (base * PX_PER_MM * Math.max(0.1, previewScale)))
+    return { stroke: base * k, gap: base * 2 * k }
+  }
   const m = computeMetrics(s)
   const gridId = useId()
   const gridH = m.rowsPerPage * m.rowH
@@ -228,6 +233,7 @@ export function Page({
                 )
               }
               // Chữ tô: một hàng chấm theo tim nét (mỗi chấm là một đoạn 0.01 mm, nắp tròn)
+              const { stroke: traceStroke, gap: traceGap } = traceDims(fontSize)
               const d = traceDotsPathData(c.glyphs, c.x, baseline, fontSize, c.anchor, traceGap)
               if (!d) return null
               return (

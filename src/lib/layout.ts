@@ -1,5 +1,5 @@
 import type { Lesson, LessonItem, LessonPage, PageSettings } from './types'
-import { PAGE_H, PAGE_W, SLANT_DEG } from './types'
+import { PAGE_H, PAGE_W, SLANT_DEG, olyForRowOly } from './types'
 import { fontSizeForOly, measureText } from './measure'
 import { noiNet } from './noinet'
 
@@ -36,7 +36,9 @@ export interface Page {
 
 /** Cài đặt thực tế của một trang soạn = cài đặt chung + phần ghi đè của trang */
 export function pageSettings(lesson: Lesson, pg: LessonPage): PageSettings {
-  return pg.rowOly ? { ...lesson.settings, rowOly: pg.rowOly } : lesson.settings
+  const rowOly = pg.rowOly ?? lesson.settings.rowOly
+  // Ô ly luôn đi theo loại vở (4 ô ly = 2,5 mm, 5 ô ly = 2 mm) → dòng kẻ đậm 10 mm
+  return { ...lesson.settings, rowOly, oly: olyForRowOly(rowOly) }
 }
 
 export interface Metrics {
@@ -130,9 +132,11 @@ function wrapWords(text: string, useNoiNet: boolean, fontSize: number, maxW: num
  * Cỡ vừa (2 ô ly): chữ hoa cao 5 ô ly chiếm trọn dòng, nét xuống rủ 3 ô ly xuống
  * dòng dưới, nên giữa hai dòng chữ phải cách một dòng kẻ trống.
  */
-function withSpacers(rows: Row[], item: LessonItem): Row[] {
-  if (item.sizeOly !== 2) return rows
+function withSpacers(rows: Row[], item: LessonItem, s: PageSettings): Row[] {
+  if (item.sizeOly !== 2 || rows.length === 0) return rows
   const out: Row[] = []
+  // Vở 4 ô ly: chữ hoa cỡ vừa cao 5 ô ly vượt quá dòng, chừa thêm một dòng trống phía trên
+  if (s.rowOly === 4) out.push({ itemId: item.id, cells: [], span: 1, scale: 1, slant: false })
   for (const r of rows) {
     out.push(r)
     out.push({ itemId: item.id, cells: [], span: 1, scale: 1, slant: false })
@@ -141,7 +145,7 @@ function withSpacers(rows: Row[], item: LessonItem): Row[] {
 }
 
 function buildRows(item: LessonItem, s: PageSettings, m: Metrics): Row[] {
-  return withSpacers(buildTextRows(item, s, m), item)
+  return withSpacers(buildTextRows(item, s, m), item, s)
 }
 
 function buildTextRows(item: LessonItem, s: PageSettings, m: Metrics): Row[] {

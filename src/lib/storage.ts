@@ -6,7 +6,7 @@ import {
   FIXED_MARGIN_LEFT,
   FIXED_MARGIN_RIGHT,
   FIXED_MARGIN_TOP,
-  FIXED_OLY_MM,
+  olyForRowOly,
   newItem,
   newLesson,
   newPage,
@@ -62,13 +62,13 @@ export function normalize(l: Partial<Lesson> & { items?: LessonItem[] }): Lesson
       ...DEFAULT_SETTINGS,
       ...(l.settings ?? {}),
       // Thông số cố định của vở: luôn ghi đè, kể cả dữ liệu cũ đã lưu giá trị khác
-      oly: FIXED_OLY_MM,
       marginLeft: FIXED_MARGIN_LEFT,
       marginRight: FIXED_MARGIN_RIGHT,
       marginTop: FIXED_MARGIN_TOP,
       marginBottom: FIXED_MARGIN_BOTTOM,
       headerHeight: FIXED_HEADER_HEIGHT,
       rowOly: normalizeRowOly(l.settings?.rowOly),
+      oly: olyForRowOly(normalizeRowOly(l.settings?.rowOly)),
     },
   }
 }
